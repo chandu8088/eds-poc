@@ -1,3 +1,5 @@
 mountpoints:
   /:
     url: https://content.da.live/chandu8088/eds-poc
+    type: markup
+    suffix: ".html"
