@@ -1,0 +1,36 @@
+.hero-banner {
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  padding: 48px 24px;
+  background: #0f5960;
+  color: var(--background-color);
+  text-align: center;
+}
+
+.hero-banner .hero-banner-content {
+  max-width: 720px;
+}
+
+.hero-banner .hero-banner-title {
+  margin: 0;
+  color: inherit;
+}
+
+.hero-banner .hero-banner-description {
+  margin: 20px 0 0;
+  font-size: var(--body-font-size-m);
+  line-height: 1.5;
+}
+
+.hero-banner .hero-banner-content a:any-link {
+  color: inherit;
+  text-decoration: underline;
+}
+
+@media (width >= 900px) {
+  .hero-banner {
+    min-height: 440px;
+    padding: 72px 32px;
+  }
+}
