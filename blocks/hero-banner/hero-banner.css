@@ -1,20 +1,38 @@
 .hero-banner {
-  display: grid;
-  place-items: center;
-  min-height: 320px;
-  padding: 48px 24px;
-  background: #000506;
-  color: var(--background-color);
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--light-color);
+}
+
+.hero-banner .hero-banner-image-row {
+  order: 0;
+}
+
+.hero-banner .hero-banner-image-row > div,
+.hero-banner .hero-banner-image-row picture,
+.hero-banner .hero-banner-image-row img {
+  display: block;
+  width: 100%;
+}
+
+.hero-banner .hero-banner-image-row img {
+  height: 260px;
+  object-fit: cover;
+}
+
+.hero-banner .hero-banner-content-row {
+  order: 1;
+  padding: 32px 24px 40px;
 }
 
 .hero-banner .hero-banner-content {
   max-width: 720px;
+  margin: 0 auto;
 }
 
 .hero-banner .hero-banner-title {
   margin: 0;
-  color: inherit;
 }
 
 .hero-banner .hero-banner-description {
@@ -24,13 +42,15 @@
 }
 
 .hero-banner .hero-banner-content a:any-link {
-  color: inherit;
   text-decoration: underline;
 }
 
 @media (width >= 900px) {
-  .hero-banner {
-    min-height: 440px;
-    padding: 72px 32px;
+  .hero-banner .hero-banner-image-row img {
+    height: 440px;
+  }
+
+  .hero-banner .hero-banner-content-row {
+    padding: 48px 32px 56px;
   }
 }
