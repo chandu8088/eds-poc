@@ -11,6 +11,33 @@ import {
   loadCSS,
 } from './aem.js';
 
+let placeholdersPromise;
+
+/**
+ * Loads shared text values from the current locale's placeholders document.
+ * @returns {Promise<Object>} Placeholder values keyed by their authored name
+ */
+export function loadPlaceholders() {
+  if (!placeholdersPromise) {
+    const placeholdersPath = window.location.pathname.startsWith('/de/')
+      ? '/de/placeholders'
+      : '/placeholders';
+    placeholdersPromise = fetch(`${placeholdersPath}.plain.html`)
+      .then((response) => (response.ok ? response.text() : ''))
+      .then((html) => {
+        const placeholdersDocument = new DOMParser().parseFromString(html, 'text/html');
+        const rows = [...placeholdersDocument.querySelectorAll('table tr')];
+        return rows.slice(1).reduce((placeholders, row) => {
+          const [key, text] = [...row.querySelectorAll('th, td')];
+          if (key && text) placeholders[key.textContent.trim()] = text.textContent.trim();
+          return placeholders;
+        }, {});
+      })
+      .catch(() => ({}));
+  }
+  return placeholdersPromise;
+}
+
 /**
  * Moves all the attributes from a given elmenet to another given element.
  * @param {Element} from the element to copy attributes from

@@ -1,11 +1,23 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
-import { moveInstrumentation } from '../../scripts/scripts.js';
+import { loadPlaceholders, moveInstrumentation } from '../../scripts/scripts.js';
+
+function replacePlaceholderTokens(element, placeholders) {
+  const tokenPattern = /{{([^}]+)}}/g;
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  let textNode = walker.nextNode();
+  while (textNode) {
+    textNode.textContent = textNode.textContent.replace(tokenPattern, (token, key) => (
+      placeholders[key.trim()] || token
+    ));
+    textNode = walker.nextNode();
+  }
+}
 
 /**
  * Decorates the authored image, title, and description within a hero banner.
  * @param {Element} block The hero banner block element
  */
-export default function decorate(block) {
+export default async function decorate(block) {
   const rows = [...block.children];
   const imageRow = rows.find((row) => row.querySelector('picture'));
   const contentRow = rows.find((row) => row !== imageRow);
@@ -20,6 +32,9 @@ export default function decorate(block) {
 
   const description = content.querySelector('p');
   if (description) description.classList.add('hero-banner-description');
+
+  const placeholders = await loadPlaceholders();
+  replacePlaceholderTokens(content, placeholders);
 
   const image = imageRow?.querySelector('picture > img');
   if (!image) return;
