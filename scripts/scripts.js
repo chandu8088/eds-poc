@@ -22,17 +22,12 @@ export function loadPlaceholders() {
     const placeholdersPath = window.location.pathname.startsWith('/de/')
       ? '/de/placeholders'
       : '/placeholders';
-    placeholdersPromise = fetch(`${placeholdersPath}.plain.html`)
-      .then((response) => (response.ok ? response.text() : ''))
-      .then((html) => {
-        const placeholdersDocument = new DOMParser().parseFromString(html, 'text/html');
-        const rows = [...placeholdersDocument.querySelectorAll('table tr')];
-        return rows.slice(1).reduce((placeholders, row) => {
-          const [key, text] = [...row.querySelectorAll('th, td')];
-          if (key && text) placeholders[key.textContent.trim()] = text.textContent.trim();
-          return placeholders;
-        }, {});
-      })
+    placeholdersPromise = fetch(`${placeholdersPath}.json`)
+      .then((response) => (response.ok ? response.json() : { data: [] }))
+      .then(({ data }) => data.reduce((placeholders, { Key: key, Text: text }) => {
+        if (key && text) placeholders[key.trim()] = text.trim();
+        return placeholders;
+      }, {}))
       .catch(() => ({}));
   }
   return placeholdersPromise;
