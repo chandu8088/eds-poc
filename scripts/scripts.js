@@ -13,6 +13,41 @@ import {
 
 let placeholdersPromise;
 
+const localizedPagePairs = {
+  '/': '/de/home-page',
+  '/de/home-page': '/',
+};
+
+function addLocaleMetadata() {
+  const { pathname, origin } = window.location;
+  const isGermanPage = pathname.startsWith('/de/');
+  const alternatePath = localizedPagePairs[pathname];
+  document.documentElement.lang = isGermanPage ? 'de' : 'en';
+
+  const languageMeta = document.createElement('meta');
+  languageMeta.name = 'language';
+  languageMeta.content = isGermanPage ? 'de' : 'en';
+  document.head.append(languageMeta);
+
+  const canonical = document.createElement('link');
+  canonical.rel = 'canonical';
+  canonical.href = `${origin}${pathname}`;
+  document.head.append(canonical);
+
+  if (!alternatePath) return;
+
+  const alternates = isGermanPage
+    ? { de: pathname, en: alternatePath, 'x-default': alternatePath }
+    : { en: pathname, de: alternatePath, 'x-default': pathname };
+  Object.entries(alternates).forEach(([language, path]) => {
+    const alternate = document.createElement('link');
+    alternate.rel = 'alternate';
+    alternate.hreflang = language;
+    alternate.href = `${origin}${path}`;
+    document.head.append(alternate);
+  });
+}
+
 /**
  * Loads shared text values from the current locale's placeholders document.
  * @returns {Promise<Object>} Placeholder values keyed by their authored name
@@ -149,7 +184,7 @@ export function decorateMain(main) {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
-  document.documentElement.lang = window.location.pathname.startsWith('/de/') ? 'de' : 'en';
+  addLocaleMetadata();
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {

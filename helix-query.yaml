@@ -5,9 +5,30 @@ indices:
     include:
       - '/**'
     exclude:
+      - '/de/**'
       - '/**.json'
     target: /query-index.json
     properties:
+      language:
+        select: none
+        value: en
+      lastModified:
+        select: none
+        value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
+      robots:
+        select: head > meta[name="robots"]
+        value: attribute(el, "content")
+  pages-de:
+    include:
+      - '/de/**'
+    exclude:
+      - '/de/placeholders.json'
+      - '/**.json'
+    target: /de/query-index.json
+    properties:
+      language:
+        select: none
+        value: de
       lastModified:
         select: none
         value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")

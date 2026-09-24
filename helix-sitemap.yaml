@@ -3,3 +3,7 @@ sitemaps:
     source: /query-index.json
     destination: /sitemap.xml
     lastmod: YYYY-MM-DD
+  de:
+    source: /de/query-index.json
+    destination: /de/sitemap.xml
+    lastmod: YYYY-MM-DD
