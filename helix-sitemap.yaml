@@ -1,9 +1,19 @@
 sitemaps:
-  default:
-    source: /query-index.json
-    destination: /sitemap.xml
+  locales:
+    origin: https://main--eds-poc--chandu8088.aem.live
+    default: en
     lastmod: YYYY-MM-DD
-  de:
-    source: /de/query-index.json
-    destination: /de/sitemap.xml
-    lastmod: YYYY-MM-DD
+    languages:
+      en:
+        source: /query-index.json
+        destination: /sitemap.xml
+        hreflang: en
+      de:
+        source: /de/query-index.json
+        destination: /de/sitemap.xml
+        hreflang: de
+        alternate: /de/{path}
+
+index:
+  - /sitemap.xml
+  - /de/sitemap.xml
